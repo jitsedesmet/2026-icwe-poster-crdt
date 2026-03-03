@@ -1,0 +1,9 @@
+.DS_Store
+.idea
+*.pdf
+
+.sass-cache
+tmp
+output
+*.log
+*.diff
