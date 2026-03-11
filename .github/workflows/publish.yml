@@ -42,6 +42,7 @@ jobs:
         run: |
           google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
             --no-pdf-header-footer \
+            --paper-width=8.27 --paper-height=11.69 \
             --print-to-pdf=output/paper.pdf \
             "file://$(pwd)/output/index.html"
 

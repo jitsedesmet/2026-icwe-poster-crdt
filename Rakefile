@@ -29,6 +29,7 @@ task :pdf do
 
   chrome = chrome_executable
   sh %(#{chrome} --headless --disable-gpu --no-pdf-header-footer \
+        --paper-width=8.27 --paper-height=11.69 \
         --print-to-pdf=output/paper.pdf \
         "file://#{Dir.pwd}/output/index.html")
   puts "PDF written to output/paper.pdf"
