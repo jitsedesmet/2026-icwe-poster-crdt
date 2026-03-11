@@ -2,6 +2,10 @@
 @import "shared.scss";
 @import "shared_override.scss";
 
+#pdf-download {
+  display: none;
+}
+
 header {
   .actions, .context {
     display: none;
