@@ -6,7 +6,10 @@ RUN bundle install
 
 COPY . .
 
-RUN bundle exec nanoc compile && bundle exec nanoc check internal_links mixed_content stale
+RUN bundle exec nanoc compile && \
+    google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+                  --no-pdf-header-footer --print-to-pdf=output/paper.pdf "file://$(pwd)/output/index.html" && \
+    bundle exec nanoc check internal_links mixed_content stale
 
 FROM httpd:2 AS runner
 
