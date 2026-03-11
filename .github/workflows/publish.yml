@@ -34,9 +34,10 @@ jobs:
           bundler-cache: true
 
       - name: Install and Build 🔧
-        run: |
-          bundle exec nanoc
-          bundle exec nanoc check internal_links mixed_content stale
+        run: bundle exec nanoc
+
+      - name: Check 🔍
+        run: bundle exec nanoc check internal_links mixed_content stale
 
       - name: Generate PDF 📄
         run: |
