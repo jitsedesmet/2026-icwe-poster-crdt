@@ -10,7 +10,7 @@ end
 namespace :build do
   desc 'Compile the Nanoc site into output/'
   task :compile do
-    sh 'bundle exec nanoc compile'
+    sh 'bundle exec nanoc'
   end
 
   desc 'Run Nanoc validation checks (internal links, mixed content, stale)'

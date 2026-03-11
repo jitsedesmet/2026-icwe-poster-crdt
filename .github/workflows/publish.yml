@@ -35,7 +35,7 @@ jobs:
 
       - name: Install and Build 🔧
         run: |
-          bundle exec nanoc compile
+          bundle exec nanoc
           bundle exec nanoc check internal_links mixed_content stale
 
       - name: Generate PDF 📄
