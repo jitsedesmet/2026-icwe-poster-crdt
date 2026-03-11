@@ -1,7 +1,7 @@
 FROM ruby:4 AS builder
 WORKDIR /app/web
 
-RUN apt-get update && apt-get install -y chromium --no-install-recommends \
+RUN apt-get update && apt-get install -y chromium fonts-liberation --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY Gemfile Gemfile.lock ./
