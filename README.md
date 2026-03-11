@@ -18,4 +18,4 @@ This article makes use of the [ScholarMarkdown](https://github.com/rubensworks/S
 
 ## Resources used for creation
 
-* [ESWC 2026 call for demo and posters](https://2026.eswc-conferences.org/calls/poster-demo/)
+* [ICWE 2026 call for demo and posters](https://icwe2026.webengineering.org/index.php/poster-and-demo-track/)
