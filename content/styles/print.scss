@@ -2,6 +2,10 @@
 @import "shared.scss";
 @import "shared_override.scss";
 
+.screenonly {
+  display: none;
+}
+
 header {
   .actions, .context {
     display: none;

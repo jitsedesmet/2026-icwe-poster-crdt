@@ -19,6 +19,7 @@ gem 'citeproc-ruby', '>= 1.1.6'
 gem 'csl-styles'
 
 group :development do
+  gem 'rake'
   # live view
   gem 'guard-nanoc', '~> 2.1.2'
   gem 'guard-rack'
