@@ -28,7 +28,7 @@ task :pdf do
     unless File.exist?('output/index.html')
 
   chrome = chrome_executable
-  sh %(#{chrome} --headless --disable-gpu \
+  sh %(#{chrome} --headless --disable-gpu -no-pdf-header-footer \
         --print-to-pdf=output/paper.pdf \
         "file://#{Dir.pwd}/output/index.html")
   puts "PDF written to output/paper.pdf"
