@@ -1,0 +1,60 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: samplepaper.aux
+The style file: splncs04.bst
+Database file #1: references.bib
+Warning--entry type for "idsa" isn't style-file defined
+--line 21 of file references.bib
+Warning--entry type for "gaia-x" isn't style-file defined
+--line 26 of file references.bib
+Warning--entry type for "mcp" isn't style-file defined
+--line 1571 of file references.bib
+Warning--entry type for "m-ld" isn't style-file defined
+--line 1634 of file references.bib
+Warning--to sort, need author or key in mcp
+Warning--to sort, need author or key in idsa
+Warning--to sort, need author or key in gaia-x
+Warning--to sort, need author or key in m-ld
+Warning--missing institution in rdf-1-2
+You've used 14 entries,
+            2850 wiz_defined-function locations,
+            668 strings with 6751 characters,
+and the built_in function-call counts, 6161 in all, are:
+= -- 448
+> -- 206
+< -- 5
++ -- 87
+- -- 72
+* -- 382
+:= -- 778
+add.period$ -- 17
+call.type$ -- 14
+change.case$ -- 89
+chr.to.int$ -- 0
+cite$ -- 19
+duplicate$ -- 586
+empty$ -- 611
+format.name$ -- 81
+if$ -- 1315
+int.to.chr$ -- 0
+int.to.str$ -- 14
+missing$ -- 125
+newline$ -- 48
+num.names$ -- 22
+pop$ -- 290
+preamble$ -- 1
+purify$ -- 63
+quote$ -- 0
+skip$ -- 144
+stack$ -- 0
+substring$ -- 223
+swap$ -- 271
+text.length$ -- 5
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 56
+warning$ -- 5
+while$ -- 35
+width$ -- 16
+write$ -- 133
+(There were 9 warnings)

@@ -1,0 +1,70 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{gaia-x}
+Gaia-x, \url{https://gaia-x.eu/}
+
+\bibitem{idsa}
+International data spaces association,
+  \url{https://internationaldataspaces.org/}
+
+\bibitem{m-ld}
+m-ld, \url{https://www.m-ld.org/}
+
+\bibitem{mcp}
+Model context protocol (2026), \url{https://modelcontextprotocol.io/}
+
+\bibitem{optimized-set-crdt}
+Bieniusa, A., Zawirski, M., Pregui{\c{c}}a, N.M., Shapiro, M., Baquero, C.,
+  Balegas, V., Duarte, S.: An optimized conflict-free replicated set. CoRR
+  (2012)
+
+\bibitem{graphrag}
+Edge, D., Trinh, H., Cheng, N.: From local to global: A graph rag approach to
+  query-focused summarization. arXiv preprint arXiv:2404.16130  (2024)
+
+\bibitem{solid-crdt-yjs}
+Gruss, J., Ciortea, A., Salvaneschi, G., Mayer, S.: Real-time collaboration in
+  linked data systems. In: Proceedings of the {ISWC} 2023 Posters, Demos and
+  Industry Tracks. {CEUR} Workshop Proceedings, vol.~3632. CEUR-WS.org (2023)
+
+\bibitem{rdf-1-2}
+Hartig, O., Champin, P.A., Kellogg, G., Seaborne, A.: {SPARQL} 1.2 query
+  language. Tech. rep. (Mar 2025), \url{https://www.w3.org/TR/rdf12-concepts/}
+
+\bibitem{rdf-crdt}
+Ib{\'{a}}{\~{n}}ez, L., Skaf{-}Molli, H., Molli, P., Corby, O.: Synchronizing
+  semantic stores with commutative replicated data types. In: Proceedings of
+  the 21st World Wide Web Conference, {WWW} 2012. {ACM} (2012)
+
+\bibitem{CRDTs}
+Shapiro, M., Pregui{\c c}a, N., Baquero, C., Zawirski, M.: {A comprehensive
+  study of Convergent and Commutative Replicated Data Types}. Research Report
+  RR-7506, {Inria -- Centre Paris-Rocquencourt ; INRIA} (Jan 2011)
+
+\bibitem{phd-symposium}
+Smet, J.D.: Optimizing write performance in decentralized data ecosystems. In:
+  The Semantic Web: {ESWC} 2025 Satellite Events - Portoroz, Slovenia, June
+  1-5, 2025, Proceedings. Springer (2025)
+
+\bibitem{braid}
+Toomim, M., Little, G., Walker, R., Bellomy, B., Gentle, S.: {Braid-HTTP:
+  Synchronization for HTTP}. Internet-Draft draft-toomim-httpbis-braid-http-04,
+  Internet Engineering Task Force (Nov 2023),
+  \url{https://datatracker.ietf.org/doc/draft-toomim-httpbis-braid-http/04/},
+  work in Progress
+
+\bibitem{solid}
+Verborgh, R.: Re-decentralizing the web, for good this time. In: Seneviratne,
+  O., Hendler, J.A. (eds.) Linking the World's Information - Essays on Tim
+  Berners-Lee's Invention of the World Wide Web, {ACM} Books, vol.~52. {ACM}
+  (2023)
+
+\bibitem{grasp}
+Walter, S., Bast, H.: Grasp: Generic reasoning and sparql generation across
+  knowledge graphs. In: International Semantic Web Conference. pp. 271--289.
+  Springer (2025)
+
+\end{thebibliography}

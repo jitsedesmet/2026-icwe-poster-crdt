@@ -1,0 +1,229 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.21 of 2022/01/12
+%
+\documentclass[runningheads]{llncs}
+%
+\usepackage[T1]{fontenc}
+% T1 fonts will be used to generate the final print and online PDFs,
+% so please use T1 fonts in your manuscript whenever possible.
+% Other font encondings may result in incorrect characters.
+%
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[inline]{enumitem}
+\usepackage{makecell}
+\usepackage{tabularx}
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+% If you use the hyperref package, please uncomment the following two lines
+% to display URLs in blue roman font according to Springer's eBook style:
+%\usepackage{color}
+%\renewcommand\UrlFont{\color{blue}\rmfamily}
+%\urlstyle{rm}
+%
+
+\begin{document}
+    \setlist[enumerate]{noitemsep, topsep=0pt}
+%
+%    \title{{\fontsize{14}{16}\selectfont Client-Driven Offline-First RDF 1.2 using OR-Sets}}
+
+    \title{Client-Driven Offline-First RDF 1.2 using OR-Sets}
+%
+%\titlerunning{Abbreviated paper title}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+    \author{Jitse De Smet\inst{1}\orcidID{0009-0002-6513-5013} \and
+    Ruben Taelman\inst{1}\orcidID{0000-0001-5118-256X}}
+%
+    \authorrunning{J. De Smet and R. Taelman}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+    \institute{IDLab, Department of Electronics and Information Systems, Ghent University – imec.
+    \email{\{firstname\}.\{lastname\}@ugent.be}}
+%
+    \maketitle              % typeset the header of the contribution
+%
+    \begin{abstract}
+        As autonomous agents increasingly write to shared RDF knowledge graphs concurrently,
+        especially in the context of decentralized data ecosystems, principled conflict resolution becomes critical.
+        Existing RDF CRDT approaches either require dedicated infrastructure or introduce
+        consistency boundary problems when storing bookkeeping across multiple resources.
+        We instantiate the state-based OR-Set over RDF 1.2 triple terms -
+        unlike prior work, retaining all bookkeeping within a single dataset without additional infrastructure -
+        and demonstrate a proof-of-concept datastore wrapper to use in query engines,
+        enabling agents to query and update a conflict-free knowledge graph via standard SPARQL,
+        unaware of the underlying merge machinery.
+        Future work will investigate constraint-aware merge semantics for RDF CRDTs.
+
+
+        \keywords{Conflict-free Replicated Data Types \and
+                  OR-Set \and
+                  RDF 1.2 \and
+                  Decentralized Web \and
+                  Offline-First \and
+                  SPARQL}
+
+        \textbf{npm package}: \href{https://www.npmjs.com/package/orset-rdf-store}{https://www.npmjs.com/package/orset-rdf-store} \\
+        \textbf{poster}: \href{https://orset-rdf.poster.jitsedesmet.be/}{https://orset-rdf.poster.jitsedesmet.be/}
+    \end{abstract}
+%
+%
+%
+
+
+    \section{Introduction}
+    \label{introduction}
+
+    Knowledge graphs expressed in RDF are a central pillar of neuro-symbolic AI:
+    techniques such as GraphRAG~\cite{graphrag}, GRASP~\cite{grasp}, and the Model Context Protocol (MCP)~\cite{mcp}
+    make it increasingly common for multiple agents to read from and write to the same RDF knowledge graph simultaneously -
+    one agent enriches the graph while another reasons over it, and a third corrects errors it discovers.
+
+    In decentralized data ecosystems - such as Solid~\cite{solid}, IDSA~\cite{idsa}, and Gaia-X~\cite{gaia-x} -
+    each participant governs their own data without relying on a central authority.
+    A critical challenge is concurrent offline editing:
+    when two agents independently modify the same resource while offline, their updates collide once connection is restored.
+    Asking an agent to resolve such conflicts manually is not always desirable - an agent that has been offline may struggle to grasp how much has changed.
+    Conflict-free Replicated Data Types (CRDTs)~\cite{CRDTs} offer a principled solution,
+    guaranteeing that any two replicas converge to the same state through well-defined merge algorithms, with no coordination required.
+
+    Solutions have been proposed for RDF-based CRDTs~\cite{rdf-crdt} and even CRDTs in Solid~\cite{solid-crdt-yjs},
+    but the introduction of RDF 1.2~\cite{rdf-1-2} opens new possibilities.
+    RDF 1.2's triple terms - where the object of a triple can itself be a triple - enable efficient,
+    first-class modelling of state-based CRDTs directly within RDF datasets, without any external bookkeeping.
+
+    In this paper, we present a\textbf{state-based add-wins set CRDT} modelled entirely in RDF 1.2.
+    All bookkeeping stays within the same dataset,
+    enabling atomic updates on the resource without server intervention,
+    and allowing both \textbf{CRDT-aware and CRDT-unaware clients} to coexist without friction.
+    By plugging a CRDT-aware datastore into a query engine, conflict resolution becomes fully transparent to both agents and query engines -
+    as demonstrated by our \href{https://www.npmjs.com/package/orset-rdf-store}{PoC implementation}.
+    Agents can then query and update a conflict-free knowledge graph through standard SPARQL interfaces,
+    without any awareness of the underlying CRDT machinery.
+
+    \section{Related Work}
+    \label{sota}
+
+    \textbf{Decentralized Data Ecosystems and Interface Heterogeneity}
+    Decentralized data ecosystems consist of self-governed data stores,
+    each individually positioned in the continuous \textit{Consistency Availability Partition-tolerance} (CAP) space and exposed through heterogeneous interfaces~\cite{phd-symposium} -
+    their only shared infrastructure being the Web itself.
+    Our CRDT is designed to work across such ecosystems by depending only on what every participant already has:
+    the ability to store and exchange RDF data over the Web, plus \textbf{ETag support} to avoid
+    \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/ETag}{mid-air collisions}.
+
+
+    \textbf{CRDTs}
+    Existing RDF CRDT approaches require more infrastructure than the Web alone.
+    The m-ld project~\cite{m-ld} provides a JavaScript CRDT engine for RDF with a similar eventual-consistency goal,
+    but requires a dedicated m-ld domain server.
+    Gruss et al.~\cite{solid-crdt-yjs} store the latest RDF state alongside a binary CRDT representation from a user-chosen library
+    (e.g. \href{https://yjs.dev/}{Yjs} or \href{https://automerge.org/}{Automerge}),
+    plus a hypermedia description of supported operations.
+    While this lets non-CRDT-aware clients consume the data, it relies on a separate binary blob outside the RDF dataset,
+    introducing a consistency boundary problem where a standard HTTP server cannot atomically update multiple resources.
+    Braid-HTTP~\cite{braid} proposes adding merge-type headers to HTTP,
+    which is complementary to our approach and could replace our custom patch encoding in a future iteration.
+
+    Since we abstract at the RDF dataset level - where only set-based operations exist - we limit ourselves to set CRDTs.
+    The SU-Set~\cite{rdf-crdt} extends the OR-Set~\cite{CRDTs} for RDF using an operation-based approach,
+    whereas we adopt the state-based OR-Set formalization of Bieniusa et al.~\cite{optimized-set-crdt},
+    which aligns naturally with HTTP's Representational State Transfer (REST) semantics -
+    exchanging full dataset state rather than individual operations.
+    Where Bieniusa et al. optimize tombstone removal using causal delivery and a known replica set,
+    we instead exploit NTP time drift bounds - an approach better suited to open decentralized ecosystems where replica sets are unknown.
+
+
+    \section{State-based Add-Wins CRDT-RDF}
+    \label{core}
+
+    The OR-Set~\cite{optimized-set-crdt} is a replicated set where each element carries a set of unique add-tags;
+    removing an element moves its tags to a tombstone set rather than deleting them outright,
+    ensuring that a concurrent add always wins over a concurrent remove.
+    We instantiate this over RDF 1.2, setting elements as RDF 1.2 triples and unique tags as \href{https://www.rfc-editor.org/rfc/rfc9562.html}{UUDv4} identifiers.
+    RDF 1.2 triple terms allow a triple to appear in the object position of another triple,
+    enabling statements to be made about triples directly.
+    We use this to link each tracked triple, its add-tags, and its tombstones through an identifying node,
+    as shown in \autoref{fig-transformer}.
+    A triple is considered present when it has at least one add-tag not in its tombstone set.
+    On merge, multiple identifying nodes for the same triple are consolidated into one.
+
+    \begin{figure}[tbp]
+    \centering
+        \begin{lstlisting}[language=JavaScript,basicstyle=\fontsize{6}{7.6}\ttfamily,breaklines=true]
+<> a crdt:container .
+[] crdt:tags <<( <> a crdt:container )>> ;
+   crdt:add "be2f95dd-8ca9-416c-b1d0-81dc45ba54c8"^^crdt:uuid .
+:me a :human .
+[] crdt:tags <<( :me a :human )>> ;
+   crdt:add "96d482e5-3ce7-4f24-a21b-a9d0506ff5b0"^^crdt:uuid ;
+   crdt:remove "77c01067-1594-475e-8c64-76f9c4ec4402"^^crdt:uuid .
+[] crdt:tags <<( :me a :man )>> ;
+   crdt:remove
+"216ac011-c2ba-4ff0-825c-7f9cf1efa4ff--2025-03-13T14:00:00Z"^^crdt:stamp-uuid .
+        \end{lstlisting}
+        \caption{RDF 1.2 representation of a state-based OR-Set with two triples present:
+                     `<> a crdt:container` and `:me a :human`.
+                     The latter has one add-tag not in its tombstone set, so it remains present.
+                     Since `:me a :man` has no add-tags, it is not present.}
+        \label{fig-transformer}
+        \vspace{-12pt}
+    \end{figure}
+
+    \subsubsection{NTP Tombstone Optimization}
+
+    Without garbage collection, tombstones accumulate indefinitely -
+    a fundamental challenge for all state-based CRDTs.
+    Bieniusa et al.'s solution requires causal delivery and a known replica set,
+    assumptions that do not hold in open decentralized ecosystems.
+    We instead exploit  \href{https://www.rfc-editor.org/rfc/rfc5905}{NTP} synchronization:
+    since NTP enters panic mode after a drift exceeding \(1000\text{s}\),
+    any two synchronized clients differ by at most \(2000\text{s}\).
+    By stamping each tag with its creation or tombstone time using `crdt:stamp-uuid` -
+    formatted as \texttt{\{uuid\}\{xsd:dateTime\}} -
+    a CRDT dataset can declare a synchronization interval \(d\), after which stale metadata is pruned:
+    1. an add-tag may be dropped if a newer one exists and all replicas have seen it;
+    2. a tombstone may be dropped once all replicas have seen it; and
+    3. the identifying blank node may be dropped if no other triple references it.
+    A tag is universally seen once its timestamp is older than \(d + 4000\text{s}\) -
+    a bound derived from the worst-case NTP drift between any two synchronized replicas.
+
+
+    \section{Conclusion}
+    \label{conclusion}
+
+    We presented a state-based add-wins set CRDT modelled entirely in RDF 1.2,
+    requiring no infrastructure beyond RDF-over-HTTP with ETag support - something most modern Web servers already provide.
+    All bookkeeping stays within the dataset itself, eliminating the consistency boundary problem.
+    An NTP-based tombstone pruning mechanism keeps the CRDT manageable without requiring a known replica set.
+    By abstracting at the quad-store level, the CRDT can be plugged into existing query engines,
+    making conflict resolution fully transparent to both agents and SPARQL clients alike.
+    A current limitation is the lack of constraint-aware merge:
+    two individually valid states can merge into a state that violates domain constraints,
+    a problem we plan to address in future work.
+
+    \begin{credits}
+        \subsubsection{\ackname}
+        Jitse De Smet is a predoctoral fellow of the Research Foundation -- Flanders (FWO) (1SB8525N).
+        The described research activities were supported by SolidLab Vlaanderen (Flemish Government, EWI and RRF project VV023/10).
+        Ruben Taelman is a postdoctoral fellow of the Research Foundation -- Flanders (FWO) (1202124N).
+    \end{credits}
+
+%
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+    \bibliographystyle{splncs04}
+    \bibliography{references}
+\end{document}
